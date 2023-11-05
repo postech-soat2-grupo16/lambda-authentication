@@ -93,7 +93,7 @@ def build_jwt(cpf):
         #Get secret
         secret = get_secrets(os.environ['SECRET_KEY_AUTH'])
         key = secret['secret_key']
-        expiration_time = datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+        expiration_time = datetime.datetime.utcnow() + datetime.timedelta(minutes=15)
         jwt_token = jwt.encode(
             {"cpf": cpf},
             key,
