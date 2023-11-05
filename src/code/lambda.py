@@ -15,15 +15,12 @@ def main(event, context):
     }
     if 'body' in event:
         request_body = json.loads(event['body'])
-        if 'cpf' not in request_body:
-            return response
-        else:
+        if 'cpf' in request_body:
             cpf = request_body['cpf']
             result = get_cliente(cpf)
-            print('CPFs encontrados: ', len(result))
             if len(result) > 0:
                 jwt = build_jwt(cpf)
-                return {
+                response = {
                     "statusCode": 200,
                     "headers": {
                         "Content-Type": "application/json"
@@ -32,20 +29,23 @@ def main(event, context):
                         "token": jwt
                     }) 
                 }
-    else:
-        return response
+    return response
 
 def get_secrets():
-    # Create a Secrets Manager client
-    secret_name = "rds/fastfood/secret"
-    session = boto3.session.Session()
-    client = session.client(
-        service_name='secretsmanager',
-        region_name='us-east-1'
-    )
-    get_secret_value_response = client.get_secret_value(SecretId=secret_name)
-    secret = json.loads(get_secret_value_response['SecretString'])    
-    return secret
+    try:
+        # Create a Secrets Manager client
+        secret_name = os.environ['SECRET_NAME']
+        session = boto3.session.Session()
+        client = session.client(
+            service_name='secretsmanager',
+            region_name='us-east-1'
+        )
+        get_secret_value_response = client.get_secret_value(SecretId=secret_name)
+        secret = json.loads(get_secret_value_response['SecretString'])    
+        return secret
+    except Exception as e:
+        print("Error! ", e)
+        sys.exit(1) 
 
 def get_cliente(cpf):
     try:
@@ -69,7 +69,7 @@ def get_cliente(cpf):
         print("Connected to the database")
 
         #Build and Query
-        query = "SELECT * FROM clientes WHERE cpf=%s"
+        query = "SELECT * FROM clientes WHERE cpf=%s LIMIT 1"
         cursor.execute(query, (cpf,))
 
         # Fetch the results
@@ -87,6 +87,10 @@ def get_cliente(cpf):
         sys.exit(1)
 
 def build_jwt(cpf):
-    print("build jwt")
-    return "123"
+    try:
+        print("build jwt")
+        return "123"
+    except Exception as e:
+        print("Error! ", e)
+        sys.exit(1)
     
