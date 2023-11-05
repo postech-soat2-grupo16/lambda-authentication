@@ -29,7 +29,7 @@ jobs:
       - name: Terraform Destroy
         run:  |
           cd terraform
-          terraform apply -auto-approve
+          terraform destroy -auto-approve
         env:
           TF_VAR_lambda_execution_role: ${{ secrets.LAMBDA_EXECUTION_ROLE }}
           TF_VAR_rds_endpoint: ${{ secrets.RDS_ENDPOINT }}
@@ -38,3 +38,4 @@ jobs:
           TF_VAR_subnet_b: ${{ vars.SUBNET_B }}
           TF_VAR_security_group_lambda: ${{ vars.SG_CLUSTER_ECS }}
           TF_VAR_secret_name: ${{ secrets.SECRET_NAME }}
+          TF_VAR_secret_name_auth: ${{ secrets.SECRET_NAME_AUTH }}

@@ -45,3 +45,8 @@ variable "secret_name" {
   type = string
   sensitive = true
 }
+
+variable "secret_name_auth" {
+  type = string
+  sensitive = true
+}

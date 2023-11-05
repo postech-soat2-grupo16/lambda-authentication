@@ -32,10 +32,9 @@ def main(event, context):
                 }
     return response
 
-def get_secrets():
+def get_secrets(secret_name):
     try:
         # Create a Secrets Manager client
-        secret_name = os.environ['SECRET_NAME']
         session = boto3.session.Session()
         client = session.client(
             service_name='secretsmanager',
@@ -51,7 +50,7 @@ def get_secrets():
 def get_cliente(cpf):
     try:
         #Get secrets
-        secret = get_secrets()
+        secret = get_secrets(os.environ['SECRET_NAME'])
         db_username = secret['username']
         db_password = secret['password']
         db_name = secret['dbname']
@@ -90,7 +89,9 @@ def get_cliente(cpf):
 def build_jwt(cpf):
     try:
         print("build jwt")
-        key = "secret"
+        #Get secret
+        secret = get_secrets(os.environ['SECRET_KEY_AUTH'])
+        key = secret['secret_key']
         encoded = jwt.encode({"cpf": cpf}, key, algorithm="HS256")
         return encoded
     except Exception as e:

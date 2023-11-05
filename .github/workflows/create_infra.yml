@@ -49,3 +49,4 @@ jobs:
           TF_VAR_subnet_b: ${{ vars.SUBNET_B }}
           TF_VAR_security_group_lambda: ${{ vars.SG_CLUSTER_ECS }}
           TF_VAR_secret_name: ${{ secrets.SECRET_NAME }}
+          TF_VAR_secret_name_auth: ${{ secrets.SECRET_NAME_AUTH }}

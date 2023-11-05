@@ -40,10 +40,11 @@ resource "aws_lambda_function" "lambda" {
 
   environment {
     variables = {
-      "RDS_ENDPOINT" = var.rds_endpoint
-      "DB_NAME"      = var.rds_db_name
-      "BUCKET_NAME"  = var.bucket_name
-      "SECRET_NAME"  = var.secret_name
+      "RDS_ENDPOINT"    = var.rds_endpoint
+      "DB_NAME"         = var.rds_db_name
+      "BUCKET_NAME"     = var.bucket_name
+      "SECRET_NAME"     = var.secret_name
+      "SECRET_KEY_AUTH" = var.secret_name_auth
     }
   }
 }
