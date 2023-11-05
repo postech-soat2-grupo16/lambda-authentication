@@ -68,7 +68,7 @@ def get_cliente(cpf):
         print("Connected to the database")
 
         #Build and Query
-        query = "SELECT * FROM clientes WHERE cpf='%s'"
+        query = "SELECT * FROM clientes WHERE cpf=%s"
         cursor.execute(query, (cpf,))
 
         # Fetch the results
