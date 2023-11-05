@@ -4,6 +4,7 @@ import boto3
 import os
 import jwt
 import datetime
+import sys
 
 def main(event, context):
     response = {
