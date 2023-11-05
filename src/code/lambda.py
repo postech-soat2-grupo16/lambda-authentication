@@ -15,10 +15,10 @@ def main(event, context):
     }
     if 'body' in event:
         request_body = json.loads(event['body'])
-        cpf = request_body['cpf']
         if 'cpf' not in request_body:
             return response
         else:
+            cpf = request_body['cpf']
             result = get_cliente(cpf)
             print('CPFs encontrados: ', len(result))
             if len(result) > 0:
