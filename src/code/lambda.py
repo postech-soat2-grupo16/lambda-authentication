@@ -2,6 +2,7 @@ import json
 import psycopg2
 import boto3
 import os
+import jwt
 
 def main(event, context):
     response = {
@@ -89,7 +90,9 @@ def get_cliente(cpf):
 def build_jwt(cpf):
     try:
         print("build jwt")
-        return "123"
+        key = "secret"
+        encoded = jwt.encode({"cpf": cpf}, key, algorithm="HS256")
+        return encoded
     except Exception as e:
         print("Error! ", e)
         sys.exit(1)
