@@ -96,7 +96,7 @@ def build_jwt(cpf):
         expiration_time = datetime.datetime.utcnow() + datetime.timedelta(minutes=15)
         payload = {
             "cpf": cpf,
-            "exp" = expiration_time
+            "exp": expiration_time
         }
         jwt_token = jwt.encode(
             payload,
