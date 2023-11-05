@@ -1,4 +1,4 @@
-name: Create Lambda Authentication Infra
+name: Deploy Lambda Authentication
 
 on:
   workflow_dispatch:
