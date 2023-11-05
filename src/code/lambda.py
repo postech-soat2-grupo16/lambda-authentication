@@ -16,10 +16,11 @@ def main(event, context):
     if 'body' in event:
         request_body = json.loads(event['body'])
         cpf = request_body['cpf']
-        if len(cpf) <= 0:
+        if 'cpf' not in request_body:
             return response
         else:
             result = get_cliente(cpf)
+            print('CPFs encontrados: ', len(result))
             if len(result) > 0:
                 jwt = build_jwt(cpf)
                 return {
