@@ -94,11 +94,14 @@ def build_jwt(cpf):
         secret = get_secrets(os.environ['SECRET_KEY_AUTH'])
         key = secret['secret_key']
         expiration_time = datetime.datetime.utcnow() + datetime.timedelta(minutes=15)
+        payload = {
+            "cpf": cpf,
+            "exp" = expiration_time
+        }
         jwt_token = jwt.encode(
-            {"cpf": cpf},
+            payload,
             key,
-            algorithm='HS256',
-            exp=expiration_time,
+            algorithm='HS256',          
         )
         return jwt_token
     except Exception as e:
