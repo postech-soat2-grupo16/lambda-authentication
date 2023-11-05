@@ -3,6 +3,7 @@ import psycopg2
 import boto3
 import os
 import jwt
+import datetime
 
 def main(event, context):
     response = {
@@ -92,8 +93,14 @@ def build_jwt(cpf):
         #Get secret
         secret = get_secrets(os.environ['SECRET_KEY_AUTH'])
         key = secret['secret_key']
-        encoded = jwt.encode({"cpf": cpf}, key, algorithm="HS256")
-        return encoded
+        expiration_time = datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+        jwt_token = jwt.encode(
+            {"cpf": cpf},
+            key,
+            algorithm='HS256',
+            exp=expiration_time,
+        )
+        return jwt_token
     except Exception as e:
         print("Error! ", e)
         sys.exit(1)
