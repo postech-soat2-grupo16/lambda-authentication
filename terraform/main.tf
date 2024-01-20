@@ -21,6 +21,32 @@ data "archive_file" "code" {
   output_path = "../src/code/code.zip"
 }
 
+#Security Group ECS
+resource "aws_security_group" "security_group_auth_lambda_ecs" {
+  name_prefix = "security_group_auth_lambda_ecs"
+  description = "SG for FastFood ECS Cluster"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    from_port = 8000
+    to_port   = 8000
+    protocol  = "tcp"
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    infra   = "lambda"
+    service = "gateway"
+    Name    = "security_group_auth_lambda_ecs"
+  }
+}
+
 ## Infra lambda
 resource "aws_lambda_function" "lambda" {
   function_name    = "lambda-authentication"
@@ -30,19 +56,17 @@ resource "aws_lambda_function" "lambda" {
   source_code_hash = data.archive_file.code.output_base64sha256
   role             = var.lambda_execution_role
   timeout          = 120
-  #layers           = [aws_lambda_layer_version.layer.arn]
-  description = "Lamda para autenticar"
+  description      = "Lamda para autenticar"
 
   vpc_config {
     subnet_ids         = [var.subnet_a, var.subnet_b]
-    security_group_ids = [var.security_group_lambda]
+    security_group_ids = [aws_security_group.security_group_auth_lambda_ecs.id]
   }
 
   environment {
     variables = {
       "RDS_ENDPOINT"    = var.rds_endpoint
       "DB_NAME"         = var.rds_db_name
-      "BUCKET_NAME"     = var.bucket_name
       "SECRET_NAME"     = var.secret_name
       "SECRET_KEY_AUTH" = var.secret_name_auth
     }
