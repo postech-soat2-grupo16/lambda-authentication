@@ -196,3 +196,4 @@ terraform.rc
 .terraform
 plan
 .terraform.lock.hcl
+src/code/code.zip

@@ -22,15 +22,16 @@ data "archive_file" "code" {
 }
 
 #Security Group ECS
-resource "aws_security_group" "security_group_auth_lambda_ecs" {
-  name_prefix = "security_group_auth_lambda_ecs"
-  description = "SG for FastFood ECS Cluster"
+resource "aws_security_group" "security_group_auth_lambda" {
+  name_prefix = "security_group_auth_lambda"
+  description = "SG for Authentication Lambda"
   vpc_id      = var.vpc_id
 
   ingress {
-    from_port = 8000
-    to_port   = 8000
-    protocol  = "tcp"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -43,12 +44,12 @@ resource "aws_security_group" "security_group_auth_lambda_ecs" {
   tags = {
     infra   = "lambda"
     service = "gateway"
-    Name    = "security_group_auth_lambda_ecs"
+    Name    = "security_group_auth_lambda"
   }
 }
 
 ## Infra lambda
-resource "aws_lambda_function" "lambda" {
+resource "aws_lambda_function" "lambda_authentication" {
   function_name    = "lambda-authentication"
   handler          = "lambda.main"
   runtime          = "python3.8"
@@ -60,7 +61,7 @@ resource "aws_lambda_function" "lambda" {
 
   vpc_config {
     subnet_ids         = [var.subnet_a, var.subnet_b]
-    security_group_ids = [aws_security_group.security_group_auth_lambda_ecs.id]
+    security_group_ids = [aws_security_group.security_group_auth_lambda.id]
   }
 
   environment {
