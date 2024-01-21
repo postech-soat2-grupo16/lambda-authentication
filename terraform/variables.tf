@@ -21,6 +21,11 @@ variable "rds_db_name" {
   sensitive = true
 }
 
+variable "vpc_id" {
+  type = string
+  default = "value"
+}
+
 variable "subnet_a" {
   type = string
   default = "value"
@@ -29,16 +34,6 @@ variable "subnet_a" {
 variable "subnet_b" {
   type = string
   default = "value"
-}
-
-variable "security_group_lambda" {
-  type = string
-  default = "value"
-}
-
-variable "bucket_name" {
-  type = string
-  default = "terraform-state-soat"
 }
 
 variable "secret_name" {
